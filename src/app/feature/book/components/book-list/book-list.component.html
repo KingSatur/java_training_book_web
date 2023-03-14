@@ -1,0 +1,44 @@
+<div style="padding: 5rem 1rem">
+  <h1>Books list</h1>
+  <button
+    mat-raised-button
+    style="margin-right: 1rem"
+    color="primary"
+    [routerLink]="['/book']"
+    style="margin-bottom: 1rem"
+  >
+    Create book
+  </button>
+  <table mat-table [dataSource]="books" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>Id.</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="authorName">
+      <th mat-header-cell *matHeaderCellDef>Author name</th>
+      <td mat-cell *matCellDef="let element">{{ element.authorName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let row">
+        <button
+          (click)="openDialog('rate')"
+          mat-icon-button
+          matTooltip="Agregar calificacion"
+        >
+          <mat-icon>star_half</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
