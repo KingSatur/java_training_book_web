@@ -1,15 +1,14 @@
 <div style="padding: 5rem 1rem">
-  <h1>Books list</h1>
   <button
     mat-raised-button
     style="margin-right: 1rem"
     color="primary"
-    [routerLink]="['/book']"
+    (click)="openDialog('create_book')"
     style="margin-bottom: 1rem"
   >
     Create book
   </button>
-  <table mat-table [dataSource]="books" class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>Id.</th>
       <td mat-cell *matCellDef="let element">{{ element.id }}</td>
@@ -29,7 +28,7 @@
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let row">
         <button
-          (click)="openDialog('rate')"
+          (click)="openDialog('rate', row)"
           mat-icon-button
           matTooltip="Agregar calificacion"
         >
@@ -41,4 +40,11 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  <mat-paginator
+    style="background: lightgoldenrodyellow"
+    [pageSizeOptions]="[2, 5, 10]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
 </div>

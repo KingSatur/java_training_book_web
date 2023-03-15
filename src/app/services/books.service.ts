@@ -10,21 +10,26 @@ import { BookDto } from 'src/shared/dto/book-dto';
 export class BooksService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  public createBook(): Observable<any> {
+  public createBook(data: {
+    name: string;
+    editorial: string;
+    authorId: number;
+  }): Observable<any> {
+    const { name, editorial, authorId } = data;
     return this.httpClient.post(`${environment.serviceUrl}/book`, {
-      name: 'Hunger games',
-      editorial: 20,
-      authorId: 1,
+      name,
+      editorial,
+      authorId,
     });
   }
 
-  public getBookById(): Observable<any> {
-    return this.httpClient.get(`${environment.serviceUrl}/book/12213`);
+  public getBookById(id: number): Observable<any> {
+    return this.httpClient.get(`${environment.serviceUrl}/book/${id}`);
   }
 
-  public getBooks(): Observable<BookDto[]> {
+  public getBooks(page: number = 1, limit: number = 5): Observable<BookDto[]> {
     return this.httpClient.get<BookDto[]>(
-      `${environment.serviceUrl}/book?page=1&limit=5`
+      `${environment.serviceUrl}/book?page=${page}&limit=${limit}`
     );
   }
 }

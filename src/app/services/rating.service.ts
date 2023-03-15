@@ -9,19 +9,19 @@ import { environment } from 'src/environments/environment.local';
 export class RatingService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  public getRatingsPerBookId(): Observable<any> {
-    return this.httpClient.get(`${environment.serviceUrl}/rating/21312`);
+  public getRatingsPerBookId(id: number): Observable<any> {
+    return this.httpClient.get(`${environment.serviceUrl}/rating/${id}`);
   }
 
-  public createRatingForBook(): Observable<any> {
+  public createRatingForBook(data: {
+    bookId: number;
+    description: string;
+    score: number;
+  }): Observable<any> {
     return this.httpClient.post(`${environment.serviceUrl}/rating`, {
-      bookId: 13,
-      description: 'description',
-      score: 300,
+      bookId: data?.bookId,
+      description: data?.description,
+      score: data?.score,
     });
-  }
-
-  public getBooks(): Observable<any> {
-    return this.httpClient.get(`${environment.serviceUrl}/book?page=1&limi=5`);
   }
 }

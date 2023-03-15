@@ -1,22 +1,43 @@
 <form
   style="padding: 5rem; display: flex; flex-direction: column"
+  [formGroup]="createRatingForm"
+  *ngIf="createRatingForm"
   class="example-form"
 >
-  <mat-form-field class="example-full-width">
+  <h1>Create rating for the book</h1>
+  <mat-form-field appearance="fill">
     <mat-label>Score</mat-label>
-    <input matInput type="number" placeholder="Ex. 200" />
+    <input
+      formControlName="score"
+      matInput
+      type="number"
+      max="1000"
+      placeholder="Ex. 200"
+    />
+    <mat-error *ngIf="createRatingForm.controls['score']?.invalid">
+      {{ getErrorMessage("score") }}
+    </mat-error>
   </mat-form-field>
 
-  <mat-form-field class="example-full-width">
+  <mat-form-field appearance="fill">
     <mat-label>Description</mat-label>
-    <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+    <textarea
+      matInput
+      formControlName="description"
+      placeholder="Ex. It makes me feel..."
+    ></textarea>
+    <mat-error *ngIf="createRatingForm.controls['description']?.invalid">
+      {{ getErrorMessage("description") }}
+    </mat-error>
   </mat-form-field>
 
   <button
     mat-raised-button
     style="margin-right: 1rem"
     color="primary"
+    [disabled]="!createRatingForm.valid"
     style="margin-bottom: 1rem"
+    (click)="createRating()"
   >
     Create rating
   </button>

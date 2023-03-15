@@ -1,1 +1,58 @@
-<p>create-book works!</p>
+<form
+  style="padding: 5rem; display: flex; flex-direction: column"
+  [formGroup]="createBookForm"
+  *ngIf="createBookForm"
+  class="example-form"
+>
+  <h1>Create book</h1>
+  <mat-form-field appearance="fill">
+    <mat-label>Book name</mat-label>
+    <input
+      formControlName="name"
+      matInput
+      type="text"
+      max="1000"
+      placeholder="Ex. 200"
+    />
+    <mat-error *ngIf="createBookForm.controls['name']?.invalid">
+      {{ getErrorMessage("name") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Editorial name</mat-label>
+    <input
+      formControlName="editorial"
+      matInput
+      type="text"
+      max="100"
+      placeholder="Ex. Green editorial"
+    />
+    <mat-error *ngIf="createBookForm.controls['editorial']?.invalid">
+      {{ getErrorMessage("editorial") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Book author</mat-label>
+    <mat-select formControlName="author">
+      <mat-option *ngFor="let author of authors" [value]="author?.id">
+        {{ author?.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="createBookForm.controls['author']?.invalid">
+      {{ getErrorMessage("author") }}
+    </mat-error>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    style="margin-right: 1rem"
+    color="primary"
+    [disabled]="!createBookForm.valid"
+    style="margin-bottom: 1rem"
+    (click)="createBook()"
+  >
+    Create book
+  </button>
+</form>

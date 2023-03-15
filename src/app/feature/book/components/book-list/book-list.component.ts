@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { BooksService } from 'src/app/services/books.service';
-import { CreateAuthorComponent } from 'src/app/shared/components/create-author/create-author.component';
+import { CreateBookComponent } from 'src/app/shared/components/create-book/create-book.component';
 import { CreateRatingComponent } from 'src/app/shared/components/create-rating/create-rating.component';
-import { CreateBookComponent } from '../create-book/create-book.component';
 
 interface BookListViewDto {
   id: number;
@@ -19,28 +20,42 @@ interface BookListViewDto {
 export class BookListComponent implements OnInit {
   public displayedColumns: string[] = ['id', 'name', 'authorName', 'actions'];
   public books: BookListViewDto[] = [];
+  public dataSource = new MatTableDataSource<BookListViewDto>([]);
+  @ViewChild(MatPaginator)
+  public paginator!: MatPaginator;
+
   public modalByAction: Record<string, any> = {
     rate: CreateRatingComponent,
     create_book: CreateBookComponent,
   };
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   constructor(
     private readonly bookService: BooksService,
     public dialog: MatDialog
   ) {}
+
   ngOnInit(): void {
-    this.bookService.getBooks().subscribe((resp) => {
-      this.books = resp?.map((dto) => ({
-        authorName: dto?.authorDto?.name,
+    this.bookService.getBooks(1, 10).subscribe((resp) => {
+      this.dataSource.data = resp?.map((dto) => ({
+        authorName: dto?.authorDto?.name!,
         id: dto?.id,
         name: dto?.name,
       }));
     });
   }
 
-  openDialog(operation: string): void {
-    console.log('eher');
-
-    this.dialog.open(this.modalByAction[operation]);
+  openDialog(operation: string, row?: BookListViewDto): void {
+    this.dialog.open(
+      this.modalByAction[operation],
+      row
+        ? {
+            data: { id: row?.id },
+          }
+        : {}
+    );
   }
 }
